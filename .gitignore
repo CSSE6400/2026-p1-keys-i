@@ -6,7 +6,6 @@
 *.dylib
 
 # Output folders
-bin/
 dist/
 build/
 out/
