@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"errors"
+	"flag"
 	"log"
 	"net/http"
 	"os"
@@ -17,15 +19,13 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	// get PORT number from env
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+	port := flag.String("p", "8080", "port to listen on")
+	flag.Parse()
 
 	router := todo.NewRouter()
 
 	srv := &http.Server{
-		Addr:    ":" + port,
+		Addr:    ":" + *port,
 		Handler: router,
 
 		// timeout limits
@@ -40,8 +40,8 @@ func main() {
 
 	// starting a go routine to manage the server
 	go func() {
-		log.Printf("listening on :%s", port)
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Printf("listening on 127.0.0.1:%s", *port)
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatal(err)
 		}
 	}()

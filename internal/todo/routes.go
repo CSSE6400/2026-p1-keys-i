@@ -7,7 +7,6 @@ import (
 
 func NewRouter() *gin.Engine {
 	rtr := gin.New()
-	rtr.Use(gin.Recovery())
 
 	// route rego with version group
 	v1 := rtr.Group("/api/v1")

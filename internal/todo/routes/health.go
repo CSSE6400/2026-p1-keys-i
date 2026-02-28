@@ -8,6 +8,6 @@ import (
 
 func RegisterHealth(rtr *gin.RouterGroup) {
 	rtr.GET("/health", func(ctx *gin.Context) {
-		ctx.IndentedJSON(http.StatusOK, gin.H{"status": "ok"})
+		ctx.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 }

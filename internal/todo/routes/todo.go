@@ -17,80 +17,56 @@ type TODOResponse struct {
 	UpdatedAt   string `json:"updated_at"`
 }
 
+type errorResp struct {
+	Error string `json:"error"`
+}
+
+var baseTodo = TODOResponse{
+	ID:          1,
+	Title:       "Watch CSSE6400 Lecture",
+	Description: "Watch the CSSE6400 lecture on ECHO360 for week 1",
+	Completed:   true,
+	DeadlineAt:  "2026-02-27T18:00:00",
+	CreatedAt:   "2026-02-20T14:00:00",
+	UpdatedAt:   "2026-02-20T14:00:00",
+}
+
+var baseTodoList = []TODOResponse{baseTodo}
+
 func RegisterTODO(rtr *gin.RouterGroup) {
-	todo := rtr.Group("todos")
+	todo := rtr.Group("/todos")
 	{
 		// GET all
 		todo.GET("", func(ctx *gin.Context) {
-			ctx.IndentedJSON(http.StatusOK, TODOResponse{
-				ID:          1,
-				Title:       "Watch CSSE6400 Lecture",
-				Description: "Watch the CSSE6400 lecture on ECHO360 for week 1",
-				Completed:   true,
-				DeadlineAt:  "2026-02-27T18:00:00",
-				CreatedAt:   "2026-02-20T14:00:00",
-				UpdatedAt:   "2026-02-20T14:00:00",
-			})
+			ctx.JSON(http.StatusOK, baseTodoList)
 		})
+
 		// GET :id
 		todo.GET("/:id", func(ctx *gin.Context) {
-			idStr := ctx.Param("id")
-
-			// convert id to int
-			id, err := strconv.Atoi(idStr)
+			id, err := strconv.Atoi(ctx.Param("id"))
 			if err != nil {
-				ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": "ID must be a valid integer"})
+				ctx.JSON(http.StatusBadRequest, errorResp{Error: "ID must be a valid integer"})
 				return
 			}
 
-			ctx.IndentedJSON(http.StatusOK, TODOResponse{
-				ID:          id,
-				Title:       "Watch CSSE6400 Lecture",
-				Description: "Watch the CSSE6400 lecture on ECHO360 for week 1",
-				Completed:   true,
-				DeadlineAt:  "2026-02-27T18:00:00",
-				CreatedAt:   "2026-02-20T14:00:00",
-				UpdatedAt:   "2026-02-20T14:00:00",
-			})
+			resp := baseTodo
+			resp.ID = id
+			ctx.JSON(http.StatusOK, resp)
 		})
 
-		// create a todo entry
+		// POST create
 		todo.POST("", func(ctx *gin.Context) {
-			ctx.IndentedJSON(http.StatusCreated, TODOResponse{
-				ID:          1,
-				Title:       "Watch CSSE6400 Lecture",
-				Description: "Watch the CSSE6400 lecture on ECHO360 for week 1",
-				Completed:   true,
-				DeadlineAt:  "2026-02-27T18:00:00",
-				CreatedAt:   "2026-02-20T14:00:00",
-				UpdatedAt:   "2026-02-20T14:00:00",
-			})
+			ctx.JSON(http.StatusCreated, baseTodo)
 		})
 
-		// update a todo entry
-		todo.PUT("", func(ctx *gin.Context) {
-			ctx.IndentedJSON(http.StatusOK, TODOResponse{
-				ID:          1,
-				Title:       "Watch CSSE6400 Lecture",
-				Description: "Watch the CSSE6400 lecture on ECHO360 for week 1",
-				Completed:   true,
-				DeadlineAt:  "2026-02-27T18:00:00",
-				CreatedAt:   "2026-02-20T14:00:00",
-				UpdatedAt:   "2026-02-20T14:00:00",
-			})
+		// PUT update
+		todo.PUT("/:id", func(ctx *gin.Context) {
+			ctx.JSON(http.StatusOK, baseTodo)
 		})
 
-		// delete a todo entry
-		todo.DELETE("", func(ctx *gin.Context) {
-			ctx.IndentedJSON(http.StatusOK, TODOResponse{
-				ID:          1,
-				Title:       "Watch CSSE6400 Lecture",
-				Description: "Watch the CSSE6400 lecture on ECHO360 for week 1",
-				Completed:   true,
-				DeadlineAt:  "2026-02-27T18:00:00",
-				CreatedAt:   "2026-02-20T14:00:00",
-				UpdatedAt:   "2026-02-20T14:00:00",
-			})
+		// DELETE
+		todo.DELETE("/:id", func(ctx *gin.Context) {
+			ctx.JSON(http.StatusOK, baseTodo)
 		})
 	}
 }
