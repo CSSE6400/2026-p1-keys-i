@@ -53,8 +53,44 @@ func RegisterTODO(rtr *gin.RouterGroup) {
 				UpdatedAt:   "2026-02-20T14:00:00",
 			})
 		})
+
 		// create a todo entry
+		todo.POST("", func(ctx *gin.Context) {
+			ctx.IndentedJSON(http.StatusCreated, TODOResponse{
+				ID:          1,
+				Title:       "Watch CSSE6400 Lecture",
+				Description: "Watch the CSSE6400 lecture on ECHO360 for week 1",
+				Completed:   true,
+				DeadlineAt:  "2026-02-27T18:00:00",
+				CreatedAt:   "2026-02-20T14:00:00",
+				UpdatedAt:   "2026-02-20T14:00:00",
+			})
+		})
+
 		// update a todo entry
+		todo.PUT("", func(ctx *gin.Context) {
+			ctx.IndentedJSON(http.StatusOK, TODOResponse{
+				ID:          1,
+				Title:       "Watch CSSE6400 Lecture",
+				Description: "Watch the CSSE6400 lecture on ECHO360 for week 1",
+				Completed:   true,
+				DeadlineAt:  "2026-02-27T18:00:00",
+				CreatedAt:   "2026-02-20T14:00:00",
+				UpdatedAt:   "2026-02-20T14:00:00",
+			})
+		})
+
 		// delete a todo entry
+		todo.DELETE("", func(ctx *gin.Context) {
+			ctx.IndentedJSON(http.StatusOK, TODOResponse{
+				ID:          1,
+				Title:       "Watch CSSE6400 Lecture",
+				Description: "Watch the CSSE6400 lecture on ECHO360 for week 1",
+				Completed:   true,
+				DeadlineAt:  "2026-02-27T18:00:00",
+				CreatedAt:   "2026-02-20T14:00:00",
+				UpdatedAt:   "2026-02-20T14:00:00",
+			})
+		})
 	}
 }
