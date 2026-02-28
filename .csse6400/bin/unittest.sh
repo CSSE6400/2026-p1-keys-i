@@ -1,9 +1,8 @@
 #!/bin/bash
 #
-# Copy the tests directory and run the tests
-
+# Copy the tests directory and run Go unit tests
 cp -r .csse6400/tests .
 
-poetry install --no-root
-poetry run python3 -m unittest discover -s tests
+go mod download
 
+go test ./... -count=1 -v

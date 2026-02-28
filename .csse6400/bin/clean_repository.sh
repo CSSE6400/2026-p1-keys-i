@@ -4,8 +4,8 @@
 
 # The following files are not allowed in a Git repository.
 ILLEGAL_FILES=(.DS_Store .localized .DS_Store? ._* .Spotlight-V100 .Trashes Thumbs.db ehthumbs.db desktop.ini)
-ILLEGAL_FILES+=(*.pyc *.pyo *.exe *.dll *.so *.a *.o *.obj *.lib)
-ILLEGAL_FILES+=(__pycache__ *.class *.jar *.war *.rar)
+ILLEGAL_FILES+=(go.work go.work.sum *.out *.prof *.coverprofile coverage.* cover.out *.test **/.cache/** **/go-build/** bin/** dist/** build/** out/** vendor/**)
+ILLEGAL_FILES+=(*.exe *.dll *.so *.dylib *.a *.o *.obj *.lib)
 
 failed=0
 for file in "${ILLEGAL_FILES[@]}"; do
@@ -22,4 +22,3 @@ if [ $failed -eq 1 ]; then
     echo "Please remove these files and try again."
     exit 1
 fi
-
