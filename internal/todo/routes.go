@@ -13,6 +13,7 @@ func NewRouter() *gin.Engine {
 	v1 := rtr.Group("/api/v1")
 	{
 		routes.RegisterHealth(v1)
+		routes.RegisterTODO(v1)
 	}
 
 	return rtr
