@@ -25,17 +25,17 @@ func main() {
 	router := todo.NewRouter()
 
 	srv := &http.Server{
-		Addr: ":" + port,
+		Addr:    ":" + port,
 		Handler: router,
 
 		// timeout limits
 		ReadHeaderTimeout: 5 * time.Second,
-		ReadTimeout: 15 * time.Second,
-		WriteTimeout: 15 * time.Second,
-		IdleTimeout: 60 * time.Second,
+		ReadTimeout:       15 * time.Second,
+		WriteTimeout:      15 * time.Second,
+		IdleTimeout:       60 * time.Second,
 
 		// header abuse protection
-		MaxHeaderBytes: 1<<20, // 1 MiB
+		MaxHeaderBytes: 1 << 20, // 1 MiB
 	}
 
 	// starting a go routine to manage the server
@@ -51,7 +51,7 @@ func main() {
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 	<-stop
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	log.Println("shutting down...")
