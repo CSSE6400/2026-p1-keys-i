@@ -4,11 +4,12 @@
 
 # Start go app
 go mod download
-go run ./cmd/api -p 6400 &
+go build -o /tmp/csse6400_api ./cmd/api
+/tmp/csse6400_api -p 6400 >/dev/null 2>&1 &
 error=$?
 pid=$!
 if [[ $error -ne 0 ]]; then
-    echo "Failed to start go app"
+    echo "Failed to start flask app"
     exit 1
 fi
 
@@ -24,4 +25,4 @@ if [[ $error -ne 0 ]]; then
 fi
 
 # Kill go app
-kill $pid
+kill $pid 2>/dev/null || true
