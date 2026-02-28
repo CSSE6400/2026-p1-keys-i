@@ -1,36 +1,27 @@
 #!/bin/bash
 #
-# Check that the Go health endpoint is returning 200
+# Check that the health endpoint is returning 200
 
-set -euo pipefail
-
-PORT=6400
-URL="http://localhost:${PORT}/api/v1/health"
-
+# Start go app
 go mod download
-
-go run ./cmd/api -p "${PORT}" &
+go run ./cmd/api -p 6400 &
+error=$?
 pid=$!
-
-cleanup() {
-  # Don't fail cleanup if the process is already gone
-  kill "${pid}" 2>/dev/null || true
-}
-trap cleanup EXIT
-
-# Wait for server to start (retry up to ~10s)
-for _ in {1..20}; do
-  if curl -s -o /dev/null "${URL}"; then
-    break
-  fi
-  sleep 0.5
-done
-
-# Assert HTTP 200
-code="$(curl -s -o /dev/null -w "%{http_code}" "${URL}")"
-if [[ "${code}" != "200" ]]; then
-  echo "Failed to get 200 from health endpoint (got ${code})"
-  exit 1
+if [[ $error -ne 0 ]]; then
+    echo "Failed to start go app"
+    exit 1
 fi
 
-echo "OK: health endpoint returned 200"
+# Wait for go app to start
+sleep 5
+
+# Check that the health endpoint is returning 200
+curl -s -o /dev/null -w "%{http_code}" http://localhost:6400/api/v1/health | grep 200
+error=$?
+if [[ $error -ne 0 ]]; then
+    echo "Failed to get 200 from health endpoint"
+    exit 1
+fi
+
+# Kill go app
+kill $pid
